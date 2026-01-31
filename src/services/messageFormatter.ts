@@ -1,0 +1,34 @@
+import type { VoteCounts } from '../types/index.js';
+import { EMOJIS, MESSAGES } from '../utils/constants.js';
+
+export function formatSoonMessage(game: string | undefined, votes: VoteCounts): string {
+  const gameText = game ? `${EMOJIS.GAME} ${game}` : EMOJIS.GAME;
+
+  return [
+    `${gameText} — anyone up?`,
+    '',
+    `${EMOJIS.GREEN} I can join (${votes.green})`,
+    `${EMOJIS.YELLOW} Maybe (${votes.yellow})`,
+    `${EMOJIS.ORANGE} Can't (${votes.orange})`,
+    '',
+    `${EMOJIS.TIMER} Closes in 30 min`,
+  ].join('\n');
+}
+
+export function formatLaterMessage(game: string | undefined, time: string, votes: VoteCounts): string {
+  const gameText = game ? `${EMOJIS.GAME} ${game}` : EMOJIS.GAME;
+
+  return [
+    `${gameText} @ ${time} — anyone around?`,
+    '',
+    `${EMOJIS.GREEN} I can join (${votes.green})`,
+    `${EMOJIS.YELLOW} Maybe (${votes.yellow})`,
+    `${EMOJIS.ORANGE} Can't (${votes.orange})`,
+    '',
+    `${EMOJIS.TIMER} Closes in 24h`,
+  ].join('\n');
+}
+
+export function formatClosedMessage(): string {
+  return MESSAGES.CLOSED;
+}

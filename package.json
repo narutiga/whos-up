@@ -1,0 +1,33 @@
+{
+  "name": "whos-up",
+  "version": "1.0.0",
+  "description": "See who's around — without asking.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["discord", "discord-bot", "gaming", "polling"],
+  "author": "kino",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/narutiga/whos-up.git"
+  },
+  "homepage": "https://github.com/narutiga/whos-up#readme",
+  "bugs": {
+    "url": "https://github.com/narutiga/whos-up/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
