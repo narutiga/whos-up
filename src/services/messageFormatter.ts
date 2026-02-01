@@ -15,11 +15,17 @@ export function formatSoonMessage(game: string | undefined, votes: VoteCounts): 
   ].join('\n');
 }
 
-export function formatLaterMessage(game: string | undefined, time: string, votes: VoteCounts): string {
+export function formatLaterMessage(
+  game: string | undefined,
+  time: string,
+  votes: VoteCounts,
+  authorId: string
+): string {
   const gameText = game ? `${EMOJIS.GAME} ${game}` : EMOJIS.GAME;
 
   return [
     `${gameText} @ ${time} — anyone around?`,
+    `Asked by <@${authorId}>`,
     '',
     `${EMOJIS.GREEN} I can join (${votes.green})`,
     `${EMOJIS.YELLOW} Maybe (${votes.yellow})`,
