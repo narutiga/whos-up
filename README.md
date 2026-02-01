@@ -31,7 +31,7 @@ See the vibe before you ask.
 
 1. **Add the bot to your server**
 
-   Coming soon
+   [Invite Who's Up](https://discord.com/oauth2/authorize?client_id=1467134752170709241&permissions=75840&integration_type=0&scope=bot+applications.commands)
 
 2. **Use the commands**
 
