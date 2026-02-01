@@ -62,7 +62,7 @@ export async function execute(
   const votes = countVotes(poll);
   const content = poll.type === 'soon'
     ? formatSoonMessage(poll.game, votes)
-    : formatLaterMessage(poll.game, poll.time!, votes);
+    : formatLaterMessage(poll.game, poll.time!, votes, poll.authorId);
 
   try {
     await reaction.message.edit({ content });

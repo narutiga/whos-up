@@ -72,7 +72,7 @@ export async function handleLaterTimezoneSelect(
   const discordTimestamp = `<t:${unixTimestamp}:f>`; // Full date and time format
 
   const initialVotes = { green: 0, yellow: 0, orange: 0 };
-  const content = formatLaterMessage(game || undefined, discordTimestamp, initialVotes);
+  const content = formatLaterMessage(game || undefined, discordTimestamp, initialVotes, interaction.user.id);
 
   // Update the ephemeral message and send a new public message
   await interaction.update({
