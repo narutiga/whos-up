@@ -15,7 +15,7 @@
     "polling"
   ],
   "author": "kino",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/narutiga/whos-up.git"
