@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/license-ISC-4ADE80" />
+  <img src="https://img.shields.io/badge/license-MIT-4ADE80" />
   <img src="https://img.shields.io/badge/node-≥20-22D3EE" />
   <img src="https://img.shields.io/badge/discord.js-v14-A78BFA" />
 </p>
@@ -23,9 +23,10 @@ See the vibe before you ask.
 ## Features
 
 - `/soon` - Check who's around to play now (closes in 30 min)
-- `/later <time>` - Check who's around at a specific time (closes in 24h)
+- `/later` - Check who's around at a specific time (closes in 24h)
 - Reaction-based voting (one vote per user)
 - DM notification when enough players are available
+- Guided time selection for `/later` — no typing, no time zone confusion
 
 ## Quick Start
 
@@ -40,11 +41,13 @@ See the vibe before you ask.
 ## Commands
 
 ### /soon
+
 Check who might be around to play now.
 
 ### /later
-Check who might be around at a specific time.
+
+Check who might be around at a specific time — picked from menus and shown in local time.
 
 ## License
 
-[ISC](LICENSE)
+[MIT](LICENSE)
