@@ -5,7 +5,6 @@ import {
 } from 'discord.js';
 import { createPoll, setCloseTimer, closePoll, getPollByMessageId } from '../services/pollManager.js';
 import { formatSoonMessage, formatClosedMessage } from '../services/messageFormatter.js';
-import { countVotes } from '../services/voteService.js';
 import { DEFAULTS, VOTE_EMOJIS, TIMEOUTS } from '../utils/constants.js';
 
 export const data = new SlashCommandBuilder()
@@ -24,7 +23,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(
   interaction: ChatInputCommandInteraction,
-  client: Client
+  _client: Client
 ): Promise<void> {
   const minPlayers = interaction.options.getInteger('min_players') ?? DEFAULTS.MIN_PLAYERS;
   const game = interaction.options.getString('game') ?? undefined;

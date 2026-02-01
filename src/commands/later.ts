@@ -1,21 +1,21 @@
 import {
   SlashCommandBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
   type ChatInputCommandInteraction,
   type Client,
 } from 'discord.js';
-import { createPoll, setCloseTimer, closePoll, getPollByMessageId } from '../services/pollManager.js';
-import { formatLaterMessage, formatClosedMessage } from '../services/messageFormatter.js';
-import { DEFAULTS, VOTE_EMOJIS, TIMEOUTS } from '../utils/constants.js';
+import { DEFAULTS, TIME_OPTIONS, TIMEZONES } from '../utils/constants.js';
+
+// Discord customId has 100 char limit. Truncate game name to be safe.
+function truncateGame(game: string, maxLength = 50): string {
+  return game.length > maxLength ? game.slice(0, maxLength) : game;
+}
 
 export const data = new SlashCommandBuilder()
   .setName('later')
   .setDescription('Check who might be around to play at a specific time')
-  .addStringOption((option) =>
-    option
-      .setName('time')
-      .setDescription('When to play (e.g., "8pm", "tonight", "in 2 hours")')
-      .setRequired(true)
-  )
   .addIntegerOption((option) =>
     option
       .setName('min_players')
@@ -27,47 +27,91 @@ export const data = new SlashCommandBuilder()
     option.setName('game').setDescription('Game to play')
   );
 
-export async function execute(
-  interaction: ChatInputCommandInteraction,
-  client: Client
-): Promise<void> {
-  const time = interaction.options.getString('time', true);
-  const minPlayers = interaction.options.getInteger('min_players') ?? DEFAULTS.MIN_PLAYERS;
-  const game = interaction.options.getString('game') ?? undefined;
+function generateDateOptions() {
+  const options: { label: string; value: string }[] = [];
+  const now = new Date();
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  const initialVotes = { green: 0, yellow: 0, orange: 0 };
-  const content = formatLaterMessage(game, time, initialVotes);
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() + i);
 
-  const message = await interaction.reply({
-    content,
-    fetchReply: true,
-  });
+    const dayName = days[date.getDay()];
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
 
-  for (const emoji of VOTE_EMOJIS) {
-    await message.react(emoji);
+    let label: string;
+    if (i === 0) {
+      label = `Today (${month}/${day} ${dayName})`;
+    } else if (i === 1) {
+      label = `Tomorrow (${month}/${day} ${dayName})`;
+    } else {
+      label = `${month}/${day} ${dayName}`;
+    }
+
+    options.push({
+      label,
+      value: date.toISOString().split('T')[0], // YYYY-MM-DD
+    });
   }
 
-  createPoll({
-    messageId: message.id,
-    channelId: message.channelId,
-    authorId: interaction.user.id,
-    type: 'later',
-    minPlayers,
-    game,
-    time,
+  return options;
+}
+
+export async function execute(
+  interaction: ChatInputCommandInteraction,
+  _client: Client
+): Promise<void> {
+  const minPlayers = interaction.options.getInteger('min_players') ?? DEFAULTS.MIN_PLAYERS;
+  const game = interaction.options.getString('game') ?? '';
+
+  const dateOptions = generateDateOptions();
+  const dateSelect = new StringSelectMenuBuilder()
+    .setCustomId(`later_date:${minPlayers}:${truncateGame(game)}`)
+    .setPlaceholder('Select a date')
+    .addOptions(
+      dateOptions.map((d) =>
+        new StringSelectMenuOptionBuilder()
+          .setLabel(d.label)
+          .setValue(d.value)
+      )
+    );
+
+  const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(dateSelect);
+
+  await interaction.reply({
+    content: '📅 What day?',
+    components: [row],
+    ephemeral: true,
   });
+}
 
-  setCloseTimer(message.id, async () => {
-    const poll = getPollByMessageId(message.id);
-    if (!poll) return;
+export function buildTimeSelect(date: string, minPlayers: number, game: string) {
+  const timeSelect = new StringSelectMenuBuilder()
+    .setCustomId(`later_time:${date}:${minPlayers}:${game}`)
+    .setPlaceholder('Select a time')
+    .addOptions(
+      TIME_OPTIONS.map((t) =>
+        new StringSelectMenuOptionBuilder()
+          .setLabel(t.label)
+          .setValue(t.value)
+      )
+    );
 
-    closePoll(message.id);
+  return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(timeSelect);
+}
 
-    try {
-      await message.edit({ content: formatClosedMessage() });
-      await message.reactions.removeAll();
-    } catch {
-      // Message may have been deleted
-    }
-  }, TIMEOUTS.LATER);
+export function buildTimezoneSelect(date: string, hour: number, minPlayers: number, game: string) {
+  const timezoneSelect = new StringSelectMenuBuilder()
+    .setCustomId(`later_tz:${date}:${hour}:${minPlayers}:${game}`)
+    .setPlaceholder('Select your timezone')
+    .addOptions(
+      TIMEZONES.map((tz) =>
+        new StringSelectMenuOptionBuilder()
+          .setLabel(tz.label)
+          .setValue(tz.value)
+      )
+    );
+
+  return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(timezoneSelect);
 }
