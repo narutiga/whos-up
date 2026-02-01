@@ -23,16 +23,16 @@ export const MESSAGES = {
 } as const;
 
 export const TIMEZONES = [
-  { label: 'JST (UTC+9)', value: 'Asia/Tokyo', offset: 9 },
-  { label: 'KST (UTC+9)', value: 'Asia/Seoul', offset: 9 },
-  { label: 'CST (UTC+8)', value: 'Asia/Shanghai', offset: 8 },
-  { label: 'IST (UTC+5:30)', value: 'Asia/Kolkata', offset: 5.5 },
-  { label: 'CET (UTC+1)', value: 'Europe/Paris', offset: 1 },
-  { label: 'GMT (UTC+0)', value: 'Europe/London', offset: 0 },
-  { label: 'EST (UTC-5)', value: 'America/New_York', offset: -5 },
-  { label: 'CST (UTC-6)', value: 'America/Chicago', offset: -6 },
-  { label: 'MST (UTC-7)', value: 'America/Denver', offset: -7 },
-  { label: 'PST (UTC-8)', value: 'America/Los_Angeles', offset: -8 },
+  { label: 'JST (UTC+9)', value: 'Asia/Tokyo' },
+  { label: 'KST (UTC+9)', value: 'Asia/Seoul' },
+  { label: 'CST (UTC+8)', value: 'Asia/Shanghai' },
+  { label: 'IST (UTC+5:30)', value: 'Asia/Kolkata' },
+  { label: 'CET (UTC+1/+2)', value: 'Europe/Paris' },
+  { label: 'GMT (UTC+0/+1)', value: 'Europe/London' },
+  { label: 'ET (UTC-5/-4)', value: 'America/New_York' },
+  { label: 'CT (UTC-6/-5)', value: 'America/Chicago' },
+  { label: 'MT (UTC-7/-6)', value: 'America/Denver' },
+  { label: 'PT (UTC-8/-7)', value: 'America/Los_Angeles' },
 ] as const;
 
 export const TIME_OPTIONS = Array.from({ length: 24 }, (_, i) => ({

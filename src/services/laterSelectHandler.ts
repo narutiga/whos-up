@@ -3,6 +3,7 @@ import { buildTimeSelect, buildTimezoneSelect } from '../commands/later.js';
 import { createPoll, setCloseTimer, closePoll, getPollByMessageId } from './pollManager.js';
 import { formatLaterMessage, formatClosedMessage } from './messageFormatter.js';
 import { TIMEZONES, VOTE_EMOJIS, TIMEOUTS } from '../utils/constants.js';
+import { getTimezoneOffset } from '../utils/timezone.js';
 
 export async function handleLaterDateSelect(interaction: StringSelectMenuInteraction): Promise<void> {
   const [, minPlayersStr, game] = interaction.customId.split(':');
@@ -45,8 +46,12 @@ export async function handleLaterTimezoneSelect(
   // Parse the selected date
   const [year, month, day] = date.split('-').map(Number);
 
+  // Calculate dynamic timezone offset for DST support
+  const targetDateForOffset = new Date(year, month - 1, day, hour);
+  const offset = getTimezoneOffset(tz.value, targetDateForOffset);
+
   // Calculate UTC hour
-  const utcHour = hour - tz.offset;
+  const utcHour = hour - offset;
 
   // Create date in UTC
   let targetDate = new Date(Date.UTC(year, month - 1, day, utcHour, 0, 0));

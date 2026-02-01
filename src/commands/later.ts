@@ -51,7 +51,7 @@ function generateDateOptions() {
 
     options.push({
       label,
-      value: date.toISOString().split('T')[0], // YYYY-MM-DD
+      value: `${date.getFullYear()}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
     });
   }
 
