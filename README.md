@@ -1,8 +1,18 @@
-# Who's Up
+<h1 align="center">Who's Up</h1>
 
-See who's around — without asking.
+<p align="center">
+  <strong>See who's around — without asking</strong>
+</p>
 
-![Who's Up Overview](docs/images/whos-up-overview.png)
+<p align="center">
+  <img src="https://img.shields.io/badge/license-ISC-4ADE80" />
+  <img src="https://img.shields.io/badge/node-≥20-22D3EE" />
+  <img src="https://img.shields.io/badge/discord.js-v14-A78BFA" />
+</p>
+
+<p align="center">
+  <img src="docs/images/whos-up-overview.png" width="320" />
+</p>
 
 ## About
 
@@ -17,47 +27,15 @@ See the vibe before you ask.
 - Reaction-based voting (one vote per user)
 - DM notification when enough players are available
 
-## Setup
+## Quick Start
 
-### 1. Create a Discord Bot
+1. **Add the bot to your server**
 
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Create a new application
-3. Go to "Bot" section and create a bot
-4. Copy the bot token
-5. Enable "Server Members Intent" in the bot settings
+   Coming soon
 
-### 2. Install
+2. **Use the commands**
 
-```bash
-git clone https://github.com/narutiga/whos-up.git
-cd whos-up
-pnpm install
-```
-
-### 3. Configure
-
-Copy `.env.example` to `.env` and fill in your credentials:
-
-```bash
-cp .env.example .env
-```
-
-```
-DISCORD_TOKEN=your_bot_token_here
-DISCORD_CLIENT_ID=your_client_id_here
-```
-
-### 4. Run
-
-```bash
-# Development
-pnpm dev
-
-# Production
-pnpm build
-pnpm start
-```
+   `/soon` or `/later 8pm` to start a poll
 
 ## Commands
 
