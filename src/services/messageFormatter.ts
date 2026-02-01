@@ -2,10 +2,10 @@ import type { VoteCounts } from '../types/index.js';
 import { EMOJIS, MESSAGES } from '../utils/constants.js';
 
 export function formatSoonMessage(game: string | undefined, votes: VoteCounts): string {
-  const gameText = game ? `${EMOJIS.GAME} ${game}` : EMOJIS.GAME;
+  const header = game ? `${EMOJIS.GAME} ${game} — anyone up?` : `${EMOJIS.GAME} anyone up?`;
 
   return [
-    `${gameText} — anyone up?`,
+    header,
     '',
     `${EMOJIS.GREEN} I can join (${votes.green})`,
     `${EMOJIS.YELLOW} Maybe (${votes.yellow})`,
