@@ -1,15 +1,16 @@
+import 'dotenv/config';
 import { GatewayIntentBits, Partials } from 'discord.js';
 
-if (!process.env.DISCORD_TOKEN) {
-  throw new Error('DISCORD_TOKEN is required');
-}
-
-if (!process.env.DISCORD_CLIENT_ID) {
-  throw new Error('DISCORD_CLIENT_ID is required');
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
 }
 
 export const config = {
-  token: process.env.DISCORD_TOKEN,
+  token: requireEnv('DISCORD_TOKEN'),
   clientId: process.env.DISCORD_CLIENT_ID,
 };
 
