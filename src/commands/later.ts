@@ -67,7 +67,7 @@ export async function execute(
 
   const dateOptions = generateDateOptions();
   const dateSelect = new StringSelectMenuBuilder()
-    .setCustomId(`later_date:${minPlayers}:${truncateGame(game)}`)
+    .setCustomId(`later_date:${minPlayers}:${encodeURIComponent(truncateGame(game))}`)
     .setPlaceholder('Select a date')
     .addOptions(
       dateOptions.map((d) =>
@@ -88,7 +88,7 @@ export async function execute(
 
 export function buildTimeSelect(date: string, minPlayers: number, game: string) {
   const timeSelect = new StringSelectMenuBuilder()
-    .setCustomId(`later_time:${date}:${minPlayers}:${game}`)
+    .setCustomId(`later_time:${date}:${minPlayers}:${encodeURIComponent(game)}`)
     .setPlaceholder('Select a time')
     .addOptions(
       TIME_OPTIONS.map((t) =>
@@ -103,7 +103,7 @@ export function buildTimeSelect(date: string, minPlayers: number, game: string) 
 
 export function buildTimezoneSelect(date: string, hour: number, minPlayers: number, game: string) {
   const timezoneSelect = new StringSelectMenuBuilder()
-    .setCustomId(`later_tz:${date}:${hour}:${minPlayers}:${game}`)
+    .setCustomId(`later_tz:${date}:${hour}:${minPlayers}:${encodeURIComponent(game)}`)
     .setPlaceholder('Select your timezone')
     .addOptions(
       TIMEZONES.map((tz) =>

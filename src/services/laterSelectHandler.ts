@@ -6,7 +6,8 @@ import { TIMEZONES, VOTE_EMOJIS, TIMEOUTS } from '../utils/constants.js';
 import { getTimezoneOffset } from '../utils/timezone.js';
 
 export async function handleLaterDateSelect(interaction: StringSelectMenuInteraction): Promise<void> {
-  const [, minPlayersStr, game] = interaction.customId.split(':');
+  const [, minPlayersStr, encodedGame] = interaction.customId.split(':');
+  const game = decodeURIComponent(encodedGame);
   const date = interaction.values[0]; // YYYY-MM-DD
   const minPlayers = parseInt(minPlayersStr, 10);
 
@@ -19,7 +20,8 @@ export async function handleLaterDateSelect(interaction: StringSelectMenuInterac
 }
 
 export async function handleLaterTimeSelect(interaction: StringSelectMenuInteraction): Promise<void> {
-  const [, date, minPlayersStr, game] = interaction.customId.split(':');
+  const [, date, minPlayersStr, encodedGame] = interaction.customId.split(':');
+  const game = decodeURIComponent(encodedGame);
   const hour = parseInt(interaction.values[0], 10);
   const minPlayers = parseInt(minPlayersStr, 10);
 
@@ -35,7 +37,8 @@ export async function handleLaterTimezoneSelect(
   interaction: StringSelectMenuInteraction,
   _client: Client
 ): Promise<void> {
-  const [, date, hourStr, minPlayersStr, game] = interaction.customId.split(':');
+  const [, date, hourStr, minPlayersStr, encodedGame] = interaction.customId.split(':');
+  const game = decodeURIComponent(encodedGame);
   const hour = parseInt(hourStr, 10);
   const minPlayers = parseInt(minPlayersStr, 10);
   const timezone = interaction.values[0];
@@ -47,7 +50,9 @@ export async function handleLaterTimezoneSelect(
   const [year, month, day] = date.split('-').map(Number);
 
   // Calculate dynamic timezone offset for DST support
-  const targetDateForOffset = new Date(year, month - 1, day, hour);
+  // Note: DST boundary edge cases may cause ±1h drift.
+  // This bot shows "around" times, not exact scheduling.
+  const targetDateForOffset = new Date(Date.UTC(year, month - 1, day, hour));
   const offset = getTimezoneOffset(tz.value, targetDateForOffset);
 
   // Calculate UTC hour

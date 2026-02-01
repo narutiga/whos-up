@@ -36,7 +36,7 @@ See the vibe before you ask.
 
 2. **Use the commands**
 
-   Use `/soon` or `/later 8pm` to start a poll
+   Use `/soon` or `/later` to start a poll
 
 ## Commands
 
