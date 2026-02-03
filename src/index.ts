@@ -5,6 +5,8 @@ import * as ready from './events/ready.js';
 import * as interactionCreate from './events/interactionCreate.js';
 import * as messageReactionAdd from './events/messageReactionAdd.js';
 import * as messageReactionRemove from './events/messageReactionRemove.js';
+import { initDatabase } from './services/database.js';
+import { restorePolls } from './services/pollManager.js';
 
 const client = new Client(clientOptions);
 
@@ -39,6 +41,9 @@ client.once(Events.ClientReady, async (readyClient) => {
   for (const guild of readyClient.guilds.cache.values()) {
     await registerCommands(guild.id);
   }
+
+  // Restore active polls from database
+  await restorePolls(readyClient);
 });
 
 client.on(Events.GuildCreate, async (guild) => {
@@ -60,5 +65,6 @@ client.on(messageReactionRemove.name, (reaction, user) => {
   messageReactionRemove.execute(reaction, user, client);
 });
 
-// Login
+// Initialize database and login
+initDatabase();
 client.login(config.token);
