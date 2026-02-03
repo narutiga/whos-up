@@ -85,3 +85,7 @@ export function markThresholdNotified(messageId: string): void {
     poll.thresholdNotified = true;
   }
 }
+
+export function getAllActivePolls(): Poll[] {
+  return Array.from(polls.values());
+}

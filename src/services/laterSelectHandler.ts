@@ -1,7 +1,8 @@
 import type { StringSelectMenuInteraction, Client } from 'discord.js';
 import { buildTimeSelect, buildTimezoneSelect } from '../commands/later.js';
 import { createPoll, setCloseTimer, closePoll, getPollByMessageId } from './pollManager.js';
-import { formatLaterMessage, formatClosedMessage } from './messageFormatter.js';
+import { formatLaterMessage, formatLaterClosedMessage } from './messageFormatter.js';
+import { countVotes } from './voteService.js';
 import { TIMEZONES, VOTE_EMOJIS, TIMEOUTS } from '../utils/constants.js';
 import { getTimezoneOffset } from '../utils/timezone.js';
 
@@ -102,11 +103,14 @@ export async function handleLaterTimezoneSelect(
   setCloseTimer(message.id, async () => {
     const poll = getPollByMessageId(message.id);
     if (!poll) return;
+    if (!poll.time) return;
 
     closePoll(message.id);
 
     try {
-      await message.edit({ content: formatClosedMessage() });
+      const votes = countVotes(poll);
+      const closedContent = formatLaterClosedMessage(poll.game, poll.time, votes, poll.authorId);
+      await message.edit({ content: closedContent });
       await message.reactions.removeAll();
     } catch {
       // Message may have been deleted
