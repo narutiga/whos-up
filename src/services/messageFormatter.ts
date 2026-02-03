@@ -38,3 +38,24 @@ export function formatLaterMessage(
 export function formatClosedMessage(): string {
   return MESSAGES.CLOSED;
 }
+
+export function formatLaterClosedMessage(
+  game: string | undefined,
+  time: string,
+  votes: VoteCounts,
+  authorId: string
+): string {
+  const gameText = game ? `${EMOJIS.GAME} ${game}` : EMOJIS.GAME;
+
+  return [
+    gameText,
+    `🕒 ${time} (your local time)`,
+    `Asked by <@${authorId}>`,
+    '',
+    `${EMOJIS.GREEN} I can join (${votes.green})`,
+    `${EMOJIS.YELLOW} Maybe (${votes.yellow})`,
+    `${EMOJIS.ORANGE} Can't (${votes.orange})`,
+    '',
+    MESSAGES.CLOSED,
+  ].join('\n');
+}
