@@ -1,13 +1,12 @@
-import { Client, REST, Routes, Events, TextChannel } from 'discord.js';
+import { Client, REST, Routes, Events } from 'discord.js';
 import { config, clientOptions } from './config/index.js';
 import { getCommandsData } from './commands/index.js';
 import * as ready from './events/ready.js';
 import * as interactionCreate from './events/interactionCreate.js';
 import * as messageReactionAdd from './events/messageReactionAdd.js';
 import * as messageReactionRemove from './events/messageReactionRemove.js';
-import { getAllActivePolls, closePoll } from './services/pollManager.js';
-import { formatClosedMessage, formatLaterClosedMessage } from './services/messageFormatter.js';
-import { countVotes } from './services/voteService.js';
+import { initDatabase } from './services/database.js';
+import { restorePolls } from './services/pollManager.js';
 
 const client = new Client(clientOptions);
 
@@ -33,6 +32,9 @@ async function registerCommands(guildId: string): Promise<void> {
 // Register events
 client.once(Events.ClientReady, async (readyClient) => {
   ready.execute(readyClient);
+
+  // Restore active polls FIRST to avoid dropped votes during startup
+  await restorePolls(readyClient);
 
   if (!config.clientId) {
     console.warn('DISCORD_CLIENT_ID is not set. Skipping command registration.');
@@ -63,41 +65,6 @@ client.on(messageReactionRemove.name, (reaction, user) => {
   messageReactionRemove.execute(reaction, user, client);
 });
 
-// Graceful shutdown - close all active polls before exit
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, closing all active polls...');
-
-  const activePolls = getAllActivePolls();
-  for (const poll of activePolls) {
-    const closedPoll = closePoll(poll.id);
-    if (!closedPoll) continue;
-
-    try {
-      const channel = await client.channels.fetch(poll.channelId);
-      if (!channel || !('messages' in channel)) continue;
-
-      const message = await (channel as TextChannel).messages.fetch(poll.id);
-      if (!message) continue;
-
-      const votes = countVotes(closedPoll);
-
-      if (poll.type === 'later' && poll.time) {
-        const content = formatLaterClosedMessage(poll.game, poll.time, votes, poll.authorId);
-        await message.edit({ content });
-      } else {
-        await message.edit({ content: formatClosedMessage() });
-      }
-
-      await message.reactions.removeAll();
-      console.log(`Closed poll ${poll.id}`);
-    } catch {
-      console.log(`Could not close poll ${poll.id} (message may be deleted)`);
-    }
-  }
-
-  console.log('All polls closed, shutting down.');
-  process.exit(0);
-});
-
-// Login
+// Initialize database and login
+initDatabase();
 client.login(config.token);
