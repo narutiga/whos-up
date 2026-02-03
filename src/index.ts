@@ -33,6 +33,9 @@ async function registerCommands(guildId: string): Promise<void> {
 client.once(Events.ClientReady, async (readyClient) => {
   ready.execute(readyClient);
 
+  // Restore active polls FIRST to avoid dropped votes during startup
+  await restorePolls(readyClient);
+
   if (!config.clientId) {
     console.warn('DISCORD_CLIENT_ID is not set. Skipping command registration.');
     return;
@@ -41,9 +44,6 @@ client.once(Events.ClientReady, async (readyClient) => {
   for (const guild of readyClient.guilds.cache.values()) {
     await registerCommands(guild.id);
   }
-
-  // Restore active polls from database
-  await restorePolls(readyClient);
 });
 
 client.on(Events.GuildCreate, async (guild) => {
