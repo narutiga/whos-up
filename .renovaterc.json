@@ -1,0 +1,28 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "timezone": "Asia/Tokyo",
+    "prConcurrentLimit": 5,
+    "extends": [
+        "config:best-practices",
+        "config:js-app"
+    ],
+    "automerge": false,
+    "vulnerabilityAlerts": {
+        "enabled": true,
+        "labels": ["security"],
+        "schedule": ["at any time"]
+    },
+    "typescript": {
+        "automerge": true,
+        "automergeType": "pr"
+    },
+    "packageRules": [
+        {
+            "matchDatasources": ["npm"],
+            "matchDepTypes": ["devDependencies"],
+            "extends": ["schedule:weeklyMonday"],
+            "assignees": ["@narutiga"],
+            "reviewers": ["@narutiga"]
+        }
+    ]
+}
