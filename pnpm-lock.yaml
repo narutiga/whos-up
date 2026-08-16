@@ -17,8 +17,8 @@ dependencies:
 
 devDependencies:
   '@types/better-sqlite3':
-    specifier: ^7.6.13
-    version: 7.6.13
+    specifier: ^9.0.0
+    version: 9.6.0
   '@types/node':
     specifier: ^25.1.0
     version: 25.1.0
@@ -353,8 +353,8 @@ packages:
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dev: false
 
-  /@types/better-sqlite3@7.6.13:
-    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
+  /@types/better-sqlite3@9.6.0:
+    resolution: {integrity: sha512-ZEEwBSgMu7GYJOynoagg5X9JbxfL6dTJDsgViJIqh67jV44kyOr9RXfmFjLK5rzC4MWssP06t9hu/JwGDnUbCg==}
     dependencies:
       '@types/node': 25.1.0
     dev: true
